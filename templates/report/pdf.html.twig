@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <title>Remonto ataskaita</title>
+    <style>
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 14px;
+            color: #222;
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 16px;
+            margin: 24px 0 8px;
+        }
+
+        .meta p {
+            margin: 0 0 8px 0;
+        }
+
+        .box {
+            border: 1px solid #cccccc;
+            padding: 12px;
+            background: #f8f9fa;
+            white-space: pre-wrap;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Remonto ataskaita</h1>
+
+    <div class="meta section">
+        <p><strong>Klientas:</strong> {{ appointment.user.email }}</p>
+        <p><strong>Servisas:</strong> {{ appointment.service.name }}</p>
+        <p><strong>Automobilis:</strong> {{ appointment.carBrand }} {{ appointment.carModel }} ({{ appointment.carYear }})</p>
+        <p><strong>Vizito data:</strong> {{ appointment.visitDate|date('Y-m-d H:i') }}</p>
+        <p><strong>Problemos aprašymas:</strong> {{ appointment.problemDescription }}</p>
+    </div>
+
+    <div class="section">
+        <h3>Remonto aprašymas</h3>
+        <div class="box">{{ report.description }}</div>
+    </div>
+
+    <div class="section">
+        <h3>Atlikti darbai</h3>
+        <div class="box">{{ report.workPerformed }}</div>
+    </div>
+
+    <div class="section">
+        <p><strong>Kaina:</strong> {{ report.price }} €</p>
+        <p><strong>Sukurta:</strong> {{ report.createdAt|date('Y-m-d H:i') }}</p>
+
+        {% if report.updatedAt %}
+            <p><strong>Atnaujinta:</strong> {{ report.updatedAt|date('Y-m-d H:i') }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

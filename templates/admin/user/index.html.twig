@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vartotojų valdymas{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <section class="page-section pt-0">
+        <div class="page-header">
+            <h1 class="section-title">Vartotojų valdymas</h1>
+            <p class="section-subtitle">
+                Filtruokite vartotojus pagal el. paštą, rolę arba priskirtą servisą ir valdykite jų duomenis.
+            </p>
+        </div>
+
+        <div class="card filter-card mb-4">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Filtravimas</h5>
+
+                <form method="get" action="{{ path('app_admin_users') }}" class="row g-3 align-items-end">
+                    <div class="col-lg-4 col-md-12">
+                        <label for="search" class="form-label">Paieška pagal el. paštą</label>
+                        <input
+                            type="text"
+                            name="q"
+                            id="search"
+                            class="form-control"
+                            placeholder="Pvz. auto, servisas, gmail..."
+                            value="{{ search }}"
+                        >
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <label for="role" class="form-label">Filtras pagal rolę</label>
+                        <select name="role" id="role" class="form-select">
+                            <option value="">Visos rolės</option>
+                            <option value="ROLE_ADMIN" {% if selectedRole == 'ROLE_ADMIN' %}selected{% endif %}>Administratorius</option>
+                            <option value="ROLE_EMPLOYEE" {% if selectedRole == 'ROLE_EMPLOYEE' %}selected{% endif %}>Darbuotojas</option>
+                            <option value="ROLE_USER" {% if selectedRole == 'ROLE_USER' %}selected{% endif %}>Vartotojas</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <label for="serviceFilter" class="form-label">Filtras pagal servisą</label>
+                        <select name="service" id="serviceFilter" class="form-select">
+                            <option value="">Visi servisai</option>
+                            {% for service in services %}
+                                <option value="{{ service.id }}" {% if selectedService == service.id|striptags|trim ~ '' %}selected{% endif %}>
+                                    {{ service.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-12">
+                        <div class="filter-actions-nowrap">
+                            <button type="submit" class="btn btn-primary w-100">Filtruoti</button>
+                            <a href="{{ path('app_admin_users') }}" class="btn btn-secondary w-100">Valyti</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if users is empty %}
+            <div class="card empty-state">
+                <div class="card-body">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Vartotojų nerasta</h5>
+                    <p class="text-soft mb-0">Pagal pasirinktus filtrus vartotojų sąraše nieko nerasta.</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 admin-users-table">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Email</th>
+                                    <th>Rolė</th>
+                                    <th>Servisas</th>
+                                    <th>Veiksmai</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td class="fw-semibold">{{ user.email }}</td>
+
+                                        <td>
+                                            {% if 'ROLE_ADMIN' in user.roles %}
+                                                <span class="status-badge status-done">Administratorius</span>
+                                            {% elseif 'ROLE_EMPLOYEE' in user.roles %}
+                                                <span class="status-badge status-clarify">Darbuotojas</span>
+                                            {% else %}
+                                                <span class="status-badge status-waiting">Vartotojas</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if user.service %}
+                                                {{ user.service.name }}
+                                            {% else %}
+                                                <span class="text-muted">—</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <a href="{{ path('app_admin_user_edit', {id: user.id}) }}" class="btn btn-sm btn-primary">
+                                                Redaguoti
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script src="{{ asset('js/admin-users-filters.js') }}"></script>
+{% endblock %}

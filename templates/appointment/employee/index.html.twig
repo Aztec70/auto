@@ -1,0 +1,335 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Serviso registracijos{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block body %}
+    <section class="page-section pt-0">
+        <div class="page-header">
+            <h1 class="section-title">Serviso registracijos</h1>
+            <p class="section-subtitle">
+                Peržiūrėkite kliento registracijas, keiskite jų būseną, prašykite patikslinimo ir kurkite ataskaitas.
+            </p>
+        </div>
+
+        {% if missingService is defined and missingService %}
+            <div class="card empty-state">
+                <div class="card-body">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Servisas nepriskirtas</h5>
+                    <p class="text-soft mb-0">
+                        Jūsų darbuotojo paskyrai dar nėra priskirtas servisas. Kreipkitės į administratorių.
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" action="{{ path('app_employee_appointments') }}" class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="status" class="form-label">Filtruoti pagal statusą</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="Aktyvios" {% if selectedStatus == 'Aktyvios' %}selected{% endif %}>Aktyvios registracijos</option>
+                                <option value="Laukia" {% if selectedStatus == 'Laukia' %}selected{% endif %}>Laukia</option>
+                                <option value="Reikia patikslinimo" {% if selectedStatus == 'Reikia patikslinimo' %}selected{% endif %}>Reikia patikslinimo</option>
+                                <option value="Patvirtinta" {% if selectedStatus == 'Patvirtinta' %}selected{% endif %}>Patvirtinta</option>
+                                <option value="Baigta" {% if selectedStatus == 'Baigta' %}selected{% endif %}>Baigta</option>
+                                <option value="Atšaukta" {% if selectedStatus == 'Atšaukta' %}selected{% endif %}>Atšaukta</option>
+                                <option value="Visos" {% if selectedStatus == 'Visos' %}selected{% endif %}>Visos registracijos</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="date" class="form-label">Filtruoti pagal vizito datą</label>
+                            <input type="text"
+                                   name="date"
+                                   id="date"
+                                   class="form-control employee-date-filter"
+                                   value="{{ selectedDate }}"
+                                   placeholder="Pasirinkite datą">
+                        </div>
+
+                        <div class="col-md-4 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-fill">
+                                Filtruoti
+                            </button>
+
+                            <a href="{{ path('app_employee_appointments') }}" class="btn btn-outline-secondary flex-fill">
+                                Valyti
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if appointments is empty %}
+                <div class="card empty-state">
+                    <div class="card-body">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-clipboard-x"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Registracijų nėra</h5>
+                        <p class="text-soft mb-0">Pagal pasirinktus filtrus registracijų nerasta.</p>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0 employee-appointments-table">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Klientas</th>
+                                        <th>Servisas</th>
+                                        <th>Automobilis</th>
+                                        <th>Vizito data</th>
+                                        <th>Problema</th>
+                                        <th>Statusas</th>
+                                        <th class="employee-actions">Veiksmai</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for appointment in appointments %}
+                                        <tr>
+                                            <td class="fw-semibold">{{ appointment.user.email }}</td>
+                                            <td>{{ appointment.service.name }}</td>
+                                            <td>{{ appointment.carBrand }} {{ appointment.carModel }} ({{ appointment.carYear }})</td>
+                                            <td>{{ appointment.visitDate|date('Y-m-d H:i') }}</td>
+                                            <td class="appointment-problem">{{ appointment.problemDescription }}</td>
+
+                                            <td>
+                                                <div class="mb-2">
+                                                    {% if appointment.status == 'Laukia' %}
+                                                        <span class="status-badge status-waiting">Laukia</span>
+                                                    {% elseif appointment.status == 'Reikia patikslinimo' %}
+                                                        <span class="status-badge status-clarify">Reikia patikslinimo</span>
+                                                    {% elseif appointment.status == 'Patvirtinta' %}
+                                                        <span class="status-badge status-confirmed">Patvirtinta</span>
+                                                    {% elseif appointment.status == 'Baigta' %}
+                                                        <span class="status-badge status-done">Baigta</span>
+                                                    {% elseif appointment.status == 'Atšaukta' %}
+                                                        <span class="status-badge bg-danger text-white">Atšaukta</span>
+                                                    {% else %}
+                                                        <span class="badge bg-secondary">{{ appointment.status }}</span>
+                                                    {% endif %}
+                                                </div>
+
+                                                {% if appointment.status == 'Reikia patikslinimo' %}
+                                                    <div class="alert alert-warning employee-note-box mt-2 mb-0 p-2 small">
+                                                        <strong>Reikalingi patikslinimai:</strong><br>
+
+                                                        {% if appointment.needsDescriptionClarification %}
+                                                            <div>Reikia patikslinti problemos aprašymą.</div>
+                                                        {% endif %}
+
+                                                        {% if appointment.needsTimeClarification %}
+                                                            <div>Reikia pasirinkti kitą vizito laiką.</div>
+                                                        {% endif %}
+
+                                                        {% if appointment.employeeNote %}
+                                                            <hr class="my-2">
+                                                            <strong>Pastaba klientui:</strong><br>
+                                                            {{ appointment.employeeNote }}
+                                                        {% endif %}
+                                                    </div>
+                                                {% elseif appointment.employeeNote %}
+                                                    <div class="alert alert-warning employee-note-box mt-2 mb-0 p-2 small">
+                                                        <strong>Pastaba klientui:</strong><br>
+                                                        {{ appointment.employeeNote }}
+                                                    </div>
+                                                {% endif %}
+
+                                                {% if appointment.userClarificationNote %}
+                                                    <div class="alert alert-info employee-note-box mt-2 mb-0 p-2 small">
+                                                        <strong>Kliento patikslinimas:</strong><br>
+                                                        {{ appointment.userClarificationNote }}
+                                                    </div>
+                                                {% endif %}
+
+                                                {% if appointment.cancelReason %}
+                                                    <div class="alert alert-danger employee-note-box mt-2 mb-0 p-2 small">
+                                                        <strong>Atšaukimo priežastis:</strong><br>
+                                                        {{ appointment.cancelReason }}
+                                                    </div>
+                                                {% endif %}
+
+                                                {% if appointment.report is not null %}
+                                                    <div class="mt-2">
+                                                        <a href="{{ path('app_employee_report_show', {'id': appointment.id}) }}" class="btn btn-sm btn-outline-success w-100">
+                                                            Peržiūrėti ataskaitą
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+
+                                            <td class="employee-actions">
+                                                <div class="d-grid gap-2 employee-status-actions">
+                                                    <a href="{{ path('app_employee_appointment_status', {id: appointment.id, status: 'Laukia'}) }}"
+                                                       class="btn btn-sm {{ appointment.status == 'Laukia' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                                        Laukia
+                                                    </a>
+
+                                                    <button type="button"
+                                                            class="btn btn-sm {{ appointment.status == 'Reikia patikslinimo' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#clarificationModal{{ appointment.id }}"
+                                                            {% if appointment.status in ['Baigta', 'Atšaukta'] %}disabled{% endif %}>
+                                                        Reikia patikslinimo
+                                                    </button>
+
+                                                    <a href="{{ path('app_employee_appointment_status', {id: appointment.id, status: 'Patvirtinta'}) }}"
+                                                       class="btn btn-sm {{ appointment.status == 'Patvirtinta' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                                        Patvirtinta
+                                                    </a>
+
+                                                    <a href="{{ path('app_employee_appointment_status', {id: appointment.id, status: 'Baigta'}) }}"
+                                                       class="btn btn-sm {{ appointment.status == 'Baigta' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                                        Baigta
+                                                    </a>
+
+                                                    {% if appointment.status not in ['Baigta', 'Atšaukta'] %}
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-danger"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#cancelAppointmentModal{{ appointment.id }}">
+                                                            Atšaukti registraciją
+                                                        </button>
+                                                    {% endif %}
+                                                </div>
+
+                                                {% if appointment.status not in ['Baigta', 'Atšaukta'] %}
+                                                    <div class="modal fade" id="clarificationModal{{ appointment.id }}" tabindex="-1" aria-labelledby="clarificationModalLabel{{ appointment.id }}" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <form method="post" action="{{ path('app_employee_appointment_note', {'id': appointment.id}) }}">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="clarificationModalLabel{{ appointment.id }}">Reikia patikslinimo</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Uždaryti"></button>
+                                                                    </div>
+
+                                                                    <div class="modal-body">
+                                                                        <div class="modal-summary-card mb-3 small">
+                                                                            <div><strong>Klientas:</strong> {{ appointment.user.email }}</div>
+                                                                            <div><strong>Automobilis:</strong> {{ appointment.carBrand }} {{ appointment.carModel }} ({{ appointment.carYear }})</div>
+                                                                            <div><strong>Vizito data:</strong> {{ appointment.visitDate|date('Y-m-d H:i') }}</div>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label fw-semibold">Ką klientas turi patikslinti?</label>
+
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input"
+                                                                                       type="checkbox"
+                                                                                       name="needsDescriptionClarification"
+                                                                                       value="1"
+                                                                                       id="needsDescriptionClarification{{ appointment.id }}"
+                                                                                       {% if appointment.needsDescriptionClarification %}checked{% endif %}>
+                                                                                <label class="form-check-label" for="needsDescriptionClarification{{ appointment.id }}">
+                                                                                    Problemos aprašymą
+                                                                                </label>
+                                                                            </div>
+
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input"
+                                                                                       type="checkbox"
+                                                                                       name="needsTimeClarification"
+                                                                                       value="1"
+                                                                                       id="needsTimeClarification{{ appointment.id }}"
+                                                                                       {% if appointment.needsTimeClarification %}checked{% endif %}>
+                                                                                <label class="form-check-label" for="needsTimeClarification{{ appointment.id }}">
+                                                                                    Vizito laiką
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <label for="employeeNote{{ appointment.id }}" class="form-label">
+                                                                            Pastaba klientui
+                                                                        </label>
+                                                                        <textarea
+                                                                            id="employeeNote{{ appointment.id }}"
+                                                                            name="employeeNote"
+                                                                            class="form-control"
+                                                                            rows="5"
+                                                                            placeholder="Pvz. Patikslinkite problemos aprašymą arba pasirinkite kitą vizito laiką..."
+                                                                            required>{{ appointment.employeeNote }}</textarea>
+
+                                                                        <div class="form-text">
+                                                                            Pasirinkite bent vieną patikslinimo tipą ir parašykite pastabą klientui.
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                            Uždaryti
+                                                                        </button>
+                                                                        <button type="submit" class="btn btn-warning">
+                                                                            Išsaugoti patikslinimą
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal fade" id="cancelAppointmentModal{{ appointment.id }}" tabindex="-1" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <form method="post" action="{{ path('app_employee_appointment_cancel', {'id': appointment.id}) }}">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Atšaukti registraciją</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Uždaryti"></button>
+                                                                    </div>
+
+                                                                    <div class="modal-body">
+                                                                        <div class="modal-summary-card mb-3 small">
+                                                                            <div><strong>Klientas:</strong> {{ appointment.user.email }}</div>
+                                                                            <div><strong>Automobilis:</strong> {{ appointment.carBrand }} {{ appointment.carModel }} ({{ appointment.carYear }})</div>
+                                                                            <div><strong>Vizito data:</strong> {{ appointment.visitDate|date('Y-m-d H:i') }}</div>
+                                                                        </div>
+
+                                                                        <label class="form-label">Atšaukimo priežastis</label>
+                                                                        <textarea name="cancelReason"
+                                                                                  class="form-control"
+                                                                                  rows="5"
+                                                                                  placeholder="Pvz. Registracija atšaukta dėl serviso užimtumo arba netinkamai pasirinktos paslaugos."
+                                                                                  required></textarea>
+
+                                                                        <div class="form-text">
+                                                                            Klientas matys šią atšaukimo priežastį savo registracijų puslapyje.
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Uždaryti</button>
+                                                                        <button type="submit" class="btn btn-danger">Atšaukti registraciją</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lt.js"></script>
+    <script src="{{ asset('js/employee-appointment.js') }}"></script>
+{% endblock %}

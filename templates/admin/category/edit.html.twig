@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Redaguoti kategoriją{% endblock %}
+
+{% block body %}
+    <section class="page-section pt-0">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="page-header">
+                            <h1 class="section-title">Redaguoti kategoriją</h1>
+                            <p class="section-subtitle">
+                                Atnaujinkite kategorijos pavadinimą.
+                            </p>
+                        </div>
+
+                        {{ form_start(form) }}
+                            <div class="mb-4">
+                                {{ form_label(form.name, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.name) }}
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="submit" class="btn btn-primary">
+                                    Atnaujinti
+                                </button>
+
+                                <a href="{{ path('app_admin_categories') }}" class="btn btn-secondary">
+                                    Grįžti
+                                </a>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

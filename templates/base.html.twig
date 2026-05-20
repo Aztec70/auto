@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Autoservisai{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" href="/">Autoservisai</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Perjungti navigaciją">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <div class="navbar-nav me-auto">
+                <a class="nav-link" href="/">Pagrindinis</a>
+                <a class="nav-link" href="/about">Apie</a>
+                <a class="nav-link" href="/services">Servisai</a>
+
+                {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="nav-link" href="/service/new">Pridėti servisą</a>
+                        <a class="nav-link" href="{{ path('app_admin_categories') }}">Kategorijos</a>
+                        <a class="nav-link" href="{{ path('app_admin_users') }}">Admin panelė</a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_EMPLOYEE') %}
+                        <a class="nav-link" href="{{ path('app_employee_appointments') }}">
+                            Serviso registracijos
+                        </a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_USER') and not is_granted('ROLE_EMPLOYEE') and not is_granted('ROLE_ADMIN') %}
+                        <a class="nav-link" href="{{ path('app_appointment_new') }}">Registracija į servisą</a>
+                        <a class="nav-link" href="{{ path('app_appointment_index') }}">Mano registracijos</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="navbar-nav align-items-lg-center">
+                {% if app.user %}
+                    {% set employeePendingCount = employee_pending_count() %}
+                    {% set userNotificationCount = user_notification_count() %}
+
+                    <div class="dropdown">
+                        <button
+                            class="btn btn-outline-light d-flex align-items-center gap-2 navbar-profile-btn"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span class="d-none d-md-inline">{{ app.user.userIdentifier }}</span>
+
+                            {% if is_granted('ROLE_EMPLOYEE') and employeePendingCount > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ employeePendingCount }}
+                                </span>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_USER') and not is_granted('ROLE_EMPLOYEE') and not is_granted('ROLE_ADMIN') and userNotificationCount > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ userNotificationCount }}
+                                </span>
+                            {% endif %}
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 navbar-profile-menu">
+                            <li>
+                                <h6 class="dropdown-header">{{ app.user.userIdentifier }}</h6>
+                            </li>
+
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_admin_users') }}">Admin panelė</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/service/new">Pridėti servisą</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_admin_categories') }}">Kategorijos</a>
+                                </li>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_EMPLOYEE') %}
+                                <li>
+                                    <a
+                                        class="dropdown-item d-flex justify-content-between align-items-center"
+                                        href="{{ path('app_employee_appointments') }}"
+                                    >
+                                        <span>Serviso registracijos</span>
+                                        {% if employeePendingCount > 0 %}
+                                            <span class="badge bg-danger">{{ employeePendingCount }}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_USER') and not is_granted('ROLE_EMPLOYEE') and not is_granted('ROLE_ADMIN') %}
+                                <li>
+                                    <a
+                                        class="dropdown-item d-flex justify-content-between align-items-center"
+                                        href="{{ path('app_appointment_index') }}"
+                                    >
+                                        <span>Mano registracijos</span>
+                                        {% if userNotificationCount > 0 %}
+                                            <span class="badge bg-danger">{{ userNotificationCount }}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_appointment_new') }}">
+                                        Registracija į servisą
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_change_password') }}">Keisti slaptažodį</a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Atsijungti</a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a class="nav-link" href="/register">Registracija</a>
+                    <a class="nav-link" href="/login">Prisijungimas</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container custom-page-container">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% block body %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const forms = document.querySelectorAll('.needs-validation');
+
+        forms.forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            });
+        });
+    });
+</script>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

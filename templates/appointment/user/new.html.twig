@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nauja registracija{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <section class="page-section pt-0">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="card">
+                    <div
+                        class="card-body p-4 p-lg-5"
+                        data-appointment-form
+                        data-category-id="{{ form.category.vars.id }}"
+                        data-service-id="{{ form.service.vars.id }}"
+                        data-visit-date-id="{{ form.visitDate.vars.id }}"
+                        data-visit-date-message-id="visit-date-message"
+                        data-busy-slots-url="{{ path('app_appointment_busy_slots') }}"
+                        data-exclude-id=""
+                    >
+                        <div class="page-header">
+                            <h1 class="section-title">Registracija į servisą</h1>
+                            <p class="section-subtitle">
+                                Pasirinkite kategoriją, servisą, įveskite automobilio duomenis ir rezervuokite tinkamą laiką.
+                            </p>
+                        </div>
+
+                        {{ form_start(form, {
+                            attr: {
+                                class: 'needs-validation',
+                                novalidate: 'novalidate'
+                            }
+                        }) }}
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form_label(form.category, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.category, {
+                                        attr: {
+                                            class: 'form-select',
+                                            required: 'required'
+                                        }
+                                    }) }}
+
+                                    <div class="invalid-feedback">
+                                        Pasirinkite kategoriją.
+                                    </div>
+
+                                    {{ form_errors(form.category) }}
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    {{ form_label(form.service, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.service, {
+                                        attr: {
+                                            class: 'form-select',
+                                            required: 'required'
+                                        }
+                                    }) }}
+
+                                    <div class="invalid-feedback">
+                                        Pasirinkite servisą.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vehicle-info-card">
+                                <h5 class="form-section-title">Automobilio informacija</h5>
+
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        {{ form_label(form.carBrand, null, {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.carBrand, {
+                                            attr: {
+                                                class: 'form-control',
+                                                required: 'required'
+                                            }
+                                        }) }}
+
+                                        <div class="invalid-feedback">
+                                            Įveskite automobilio markę.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        {{ form_label(form.carModel, null, {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.carModel, {
+                                            attr: {
+                                                class: 'form-control',
+                                                required: 'required'
+                                            }
+                                        }) }}
+
+                                        <div class="invalid-feedback">
+                                            Įveskite automobilio modelį.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        {{ form_label(form.carYear, null, {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.carYear, {
+                                            attr: {
+                                                class: 'form-control',
+                                                required: 'required'
+                                            }
+                                        }) }}
+
+                                        <div class="invalid-feedback">
+                                            Įveskite pagaminimo metus.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_label(form.visitDate, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.visitDate, {
+                                    attr: {
+                                        class: 'form-control js-flatpickr',
+                                        required: 'required'
+                                    }
+                                }) }}
+
+                                <div id="visit-date-message" class="invalid-feedback d-block"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                {{ form_label(form.problemDescription, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.problemDescription, {
+                                    attr: {
+                                        class: 'form-control',
+                                        rows: 5,
+                                        required: 'required',
+                                        minlength: 10,
+                                        placeholder: 'Trumpai aprašykite problemą'
+                                    }
+                                }) }}
+
+                                <div class="invalid-feedback">
+                                    Problemos aprašymas turi būti bent 10 simbolių ilgio.
+                                </div>
+
+                                {{ form_errors(form.problemDescription) }}
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="submit" class="btn btn-primary">Registruotis</button>
+                                <a href="{{ path('app_appointment_new') }}" class="btn btn-danger">Išvalyti</a>
+                                <a href="{{ path('app_appointment_index') }}" class="btn btn-secondary">Mano registracijos</a>
+                            </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lt.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script src="{{ asset('js/appointment-form.js') }}"></script>
+{% endblock %}

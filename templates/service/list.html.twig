@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Servisų sąrašas{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <section class="page-section pt-0">
+        <div class="page-header d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+            <div>
+                <h1 class="section-title">Servisų sąrašas</h1>
+                <p class="section-subtitle">
+                    Peržiūrėkite visus galimus servisus, filtruokite pagal kategoriją arba konkretų servisą.
+                </p>
+            </div>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <div>
+                    <a href="{{ path('service_new') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>Pridėti servisą
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div
+            class="card filter-card mb-4"
+            data-service-list-filters
+            data-category-id="category"
+            data-service-id="serviceFilter"
+        >
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Filtravimas</h5>
+
+                <form method="get" action="{{ path('service_list') }}" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Filtruoti pagal kategoriją</label>
+                        <select name="category" id="category" class="form-select">
+                            <option value="">Visos kategorijos</option>
+                            {% for category in categories %}
+                                <option
+                                    value="{{ category.id }}"
+                                    data-services="{% for service in allServices %}{% if category in service.categories %}{{ service.id }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}"
+                                    {% if selectedCategory == category.id ~ '' %}selected{% endif %}
+                                >
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="serviceFilter" class="form-label">Filtruoti pagal servisą</label>
+                        <select name="service" id="serviceFilter" class="form-select">
+                            <option value="">Visi servisai</option>
+                            {% for serviceOption in allServices %}
+                                <option
+                                    value="{{ serviceOption.id }}"
+                                    data-categories="{% for category in serviceOption.categories %}{{ category.id }}{% if not loop.last %},{% endif %}{% endfor %}"
+                                    {% if selectedService == serviceOption.id ~ '' %}selected{% endif %}
+                                >
+                                    {{ serviceOption.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 align-self-end">
+                        <button type="submit" class="btn btn-primary w-100">Filtruoti</button>
+                    </div>
+
+                    <div class="col-md-2 align-self-end">
+                        <a href="{{ path('service_list') }}" class="btn btn-danger w-100">Valyti</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if services is empty %}
+            <div class="card empty-state">
+                <div class="card-body">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-tools"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Servisų nerasta</h5>
+                    <p class="text-soft mb-0">Šiuo metu pagal pasirinktus filtrus servisų nėra.</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="row g-4">
+                {% for service in services %}
+                    <div class="col-lg-6">
+                        <div class="card service-card h-100">
+                            <div class="row g-0 h-100">
+                                <div class="col-md-4">
+                                    <div class="service-image-wrapper">
+                                        {% if service.imageName %}
+                                            <img src="{{ asset('uploads/services/' ~ service.imageName) }}" alt="{{ service.name }}">
+                                        {% else %}
+                                            <div class="service-placeholder">
+                                                <i class="bi bi-tools"></i>
+                                                <div>Nuotraukos nėra</div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-8">
+                                    <div class="card-body h-100 d-flex flex-column">
+                                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                            <div>
+                                                <h4 class="fw-bold mb-1">{{ service.name }}</h4>
+
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                    <div class="small text-muted">ID: {{ service.id }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="service-meta mb-3">
+                                            <p>
+                                                <strong>Darbo laikas:</strong>
+                                                {{ service.formattedWorkingHours }}
+                                            </p>
+                                            <p>
+                                                <strong>Adresas:</strong>
+                                                {{ service.address }}
+                                            </p>
+                                            <p>
+                                                <strong>Telefonas:</strong>
+                                                {{ service.phone }}
+                                            </p>
+                                            <p>
+                                                <strong>El. paštas:</strong>
+                                                {{ service.email }}
+                                            </p>
+
+                                            {% if service.description %}
+                                                <p class="mb-0">
+                                                    <strong>Aprašymas:</strong>
+                                                    {{ service.description }}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="d-flex flex-wrap gap-1">
+                                                {% for category in service.categories %}
+                                                    <span class="badge service-category-badge">
+                                                        {{ category.name }}
+                                                    </span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-auto d-flex flex-wrap gap-2">
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <a href="{{ path('service_edit', {'id': service.id}) }}" class="btn btn-sm btn-warning">
+                                                    Redaguoti
+                                                </a>
+
+                                                <a
+                                                    href="{{ path('service_delete', {'id': service.id}) }}"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Ar tikrai ištrinti?')"
+                                                >
+                                                    Ištrinti
+                                                </a>
+                                            {% elseif is_granted('ROLE_USER') and not is_granted('ROLE_EMPLOYEE') and not is_granted('ROLE_ADMIN') %}
+                                                <a href="{{ path('app_appointment_new', {'service': service.id}) }}" class="btn btn-primary">
+                                                    Registruotis
+                                                </a>
+                                            {% else %}
+                                                <span class="text-muted">Registracija vartotojams</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script src="{{ asset('js/service-list-filters.js') }}"></script>
+{% endblock %}

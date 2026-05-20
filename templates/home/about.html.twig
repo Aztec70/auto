@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apie mus{% endblock %}
+
+{% block body %}
+    <section class="page-section">
+        <div class="hero-section text-center text-lg-start">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-8">
+                    <h1>Apie autoserviso sistemą</h1>
+                    <p>
+                        Ši sistema buvo sukurta tam, kad autoserviso registracijos, remonto eiga ir klientų informavimas
+                        būtų valdomi paprastai, aiškiai ir moderniai vienoje vietoje.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div class="text-center">
+            <h2 class="section-title">Ką leidžia ši sistema?</h2>
+            <p class="section-subtitle mx-auto">
+                Sistema apjungia pagrindinius autoserviso procesus į vieną bendrą sprendimą.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h5 class="fw-bold">Registracijos valdymas</h5>
+                    <p class="mb-0 text-muted">
+                        Klientas gali registruotis į servisą, keisti duomenis, matyti būseną ir gauti pastabas iš darbuotojo.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-tools"></i>
+                    </div>
+                    <h5 class="fw-bold">Darbuotojo darbo eiga</h5>
+                    <p class="mb-0 text-muted">
+                        Darbuotojas gali keisti registracijos būseną, prašyti patikslinimo ir kurti remonto ataskaitas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5 class="fw-bold">Administravimas</h5>
+                    <p class="mb-0 text-muted">
+                        Administratorius valdo vartotojus, servisus, roles ir užtikrina bendrą sistemos veikimą.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div class="cta-box text-center">
+            <h2 class="fw-bold mb-3">Norite pradėti naudotis sistema?</h2>
+            <p class="mb-4">
+                Prisijunkite arba susikurkite paskyrą ir registruokitės į pasirinktą servisą internetu.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                {% if not app.user %}
+                    <a href="/register" class="btn btn-warning btn-lg">Registruotis</a>
+                    <a href="/login" class="btn btn-outline-light btn-lg">Prisijungti</a>
+                {% else %}
+                    <a href="/services" class="btn btn-warning btn-lg">Peržiūrėti servisus</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

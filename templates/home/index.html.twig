@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pagrindinis | Autoservisas{% endblock %}
+
+{% block body %}
+    <section class="page-section">
+        <div class="hero-section text-center text-lg-start">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <h1>Patogi registracija į autoservisą internetu</h1>
+                    <p>
+                        Moderni autoserviso sistema, leidžianti klientams lengvai registruotis,
+                        darbuotojams valdyti registracijas, o administratoriui kontroliuoti visą sistemos veiklą vienoje vietoje.
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_EMPLOYEE') and not is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_appointment_new') }}" class="btn btn-warning btn-lg">
+                                Registruotis į servisą
+                            </a>
+                            <a href="/services" class="btn btn-outline-light btn-lg">
+                                Peržiūrėti servisus
+                            </a>
+                        {% elseif app.user and is_granted('ROLE_EMPLOYEE') %}
+                            <a href="{{ path('app_employee_appointments') }}" class="btn btn-warning btn-lg">
+                                Peržiūrėti registracijas
+                            </a>
+                        {% elseif app.user and is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_admin_users') }}" class="btn btn-warning btn-lg">
+                                Eiti į administravimą
+                            </a>
+                        {% else %}
+                            <a href="/register" class="btn btn-warning btn-lg">
+                                Registruotis
+                            </a>
+                            <a href="/login" class="btn btn-outline-light btn-lg">
+                                Prisijungti
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">Ką galite atlikti sistemoje?</h5>
+                        <ul class="mb-0 ps-3">
+                            <li class="mb-2">Registruotis į servisą internetu</li>
+                            <li class="mb-2">Stebėti registracijos būseną</li>
+                            <li class="mb-2">Gauti serviso pastabas ir ataskaitas</li>
+                            <li class="mb-2">Peržiūrėti PDF remonto ataskaitas</li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div class="text-center">
+            <h2 class="section-title">Kodėl verta naudoti šią sistemą?</h2>
+            <p class="section-subtitle mx-auto">
+                Sistema sukurta taip, kad būtų patogi tiek klientui, tiek autoserviso darbuotojui, tiek administratoriui.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h5 class="fw-bold">Greita registracija</h5>
+                    <p class="mb-0 text-muted">
+                        Klientas gali greitai pasirinkti servisą, įvesti automobilio duomenis ir rezervuoti laiką internetu.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-bell"></i>
+                    </div>
+                    <h5 class="fw-bold">Būsenų stebėjimas</h5>
+                    <p class="mb-0 text-muted">
+                        Sistema leidžia matyti registracijos būsenos pokyčius, serviso pastabas ir remonto eigą.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <h5 class="fw-bold">Ataskaitos ir PDF</h5>
+                    <p class="mb-0 text-muted">
+                        Po remonto klientas gali peržiūrėti ataskaitą ir atsisiųsti ją PDF formatu.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div class="text-center">
+            <h2 class="section-title">Kaip tai veikia?</h2>
+            <p class="section-subtitle mx-auto">
+                Naudojimosi eiga paprasta ir aiški.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <h6 class="fw-bold">1. Prisijungimas</h6>
+                    <p class="mb-0 text-muted">Vartotojas susikuria paskyrą arba prisijungia prie sistemos.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-car-front"></i>
+                    </div>
+                    <h6 class="fw-bold">2. Registracija</h6>
+                    <p class="mb-0 text-muted">Įvedami automobilio duomenys, gedimo aprašymas ir pasirenkamas laikas.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-tools"></i>
+                    </div>
+                    <h6 class="fw-bold">3. Serviso darbas</h6>
+                    <p class="mb-0 text-muted">Darbuotojas peržiūri registraciją, keičia būseną ir esant poreikiui prašo patikslinimo.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-check2-square"></i>
+                    </div>
+                    <h6 class="fw-bold">4. Ataskaita</h6>
+                    <p class="mb-0 text-muted">Po remonto vartotojas peržiūri ataskaitą ir atsisiunčia PDF dokumentą.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div class="cta-box text-center">
+            <h2 class="fw-bold mb-3">Pasiruošę pradėti?</h2>
+            <p class="mb-4">
+                Registruokitės ir valdykite autoserviso procesą greitai, aiškiai ir patogiai vienoje sistemoje.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="/services" class="btn btn-warning btn-lg">Peržiūrėti servisus</a>
+
+                {% if not app.user %}
+                    <a href="/register" class="btn btn-outline-light btn-lg">Sukurti paskyrą</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ataskaitos peržiūra{% endblock %}
+
+{% block body %}
+    <section class="page-section pt-0">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="page-header">
+                            <h1 class="section-title">Remonto ataskaita</h1>
+                            <p class="section-subtitle">
+                                Peržiūrėkite visą remonto informaciją, atliktus darbus ir galutinę kainą.
+                            </p>
+                        </div>
+
+                        <div class="vehicle-info-card">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="details-card h-100">
+                                        <p class="mb-2"><strong>Klientas:</strong> {{ appointment.user.email }}</p>
+                                        <p class="mb-2"><strong>Servisas:</strong> {{ appointment.service.name }}</p>
+                                        <p class="mb-0"><strong>Automobilis:</strong> {{ appointment.carBrand }} {{ appointment.carModel }} ({{ appointment.carYear }})</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="details-card h-100">
+                                        <p class="mb-2"><strong>Vizito data:</strong> {{ appointment.visitDate|date('Y-m-d H:i') }}</p>
+                                        <p class="mb-0"><strong>Problemos aprašymas:</strong> {{ appointment.problemDescription }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="form-section-title">Remonto aprašymas</h5>
+                            <textarea class="form-control report-readonly" rows="4" readonly>{{ report.description }}</textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="form-section-title">Atlikti darbai</h5>
+                            <textarea class="form-control report-readonly" rows="4" readonly>{{ report.workPerformed }}</textarea>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="report-stat-card">
+                                    <div class="report-stat-label">Kaina</div>
+                                    <div class="fw-bold fs-5">{{ report.price }} €</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="report-stat-card">
+                                    <div class="report-stat-label">Sukurta</div>
+                                    <div class="fw-semibold">{{ report.createdAt|date('Y-m-d H:i') }}</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="report-stat-card">
+                                    <div class="report-stat-label">Atnaujinta</div>
+                                    <div class="fw-semibold">
+                                        {% if report.updatedAt %}
+                                            {{ report.updatedAt|date('Y-m-d H:i') }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 flex-wrap">
+                            {% if is_granted('ROLE_EMPLOYEE') %}
+                                <a href="{{ path('app_employee_report_edit', {'id': appointment.id}) }}" class="btn btn-primary">
+                                    Redaguoti ataskaitą
+                                </a>
+                                <a href="{{ path('app_employee_report_pdf', {'id': appointment.id}) }}" class="btn btn-outline-danger">
+                                    Atsisiųsti PDF
+                                </a>
+                                <a href="{{ path('app_employee_appointments') }}" class="btn btn-secondary">
+                                    Grįžti
+                                </a>
+                            {% else %}
+                                <a href="{{ path('app_user_report_pdf', {'id': appointment.id}) }}" class="btn btn-outline-danger">
+                                    Atsisiųsti PDF
+                                </a>
+                                <a href="javascript:history.back()" class="btn btn-secondary">
+                                    Grįžti
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

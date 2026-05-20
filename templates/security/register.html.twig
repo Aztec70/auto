@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registracija{% endblock %}
+
+{% block body %}
+    <section class="page-section auth-section">
+        <div class="container">
+            <div class="auth-card">
+                <div class="card">
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="text-center mb-4">
+                            <div class="feature-icon mx-auto">
+                                <i class="bi bi-person-plus"></i>
+                            </div>
+                            <h1 class="auth-title mb-2">Registracija</h1>
+                            <p class="auth-subtitle">Sukurkite naują paskyrą autoservisai sistemoje</p>
+                        </div>
+
+                        {{ form_start(registrationForm, {
+                            'attr': {
+                                'class': 'needs-validation',
+                                'novalidate': 'novalidate'
+                            }
+                        }) }}
+
+                            <div class="mb-3">
+                                {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(registrationForm.email, {
+                                    'attr': {
+                                        'class': 'form-control' ~ (registrationForm.email.vars.errors|length > 0 ? ' is-invalid' : ''),
+                                        'placeholder': 'Įveskite el. paštą'
+                                    }
+                                }) }}
+
+                                <div class="invalid-feedback">
+                                    {% if registrationForm.email.vars.errors|length > 0 %}
+                                        {{ registrationForm.email.vars.errors[0].message }}
+                                    {% else %}
+                                        El. pašto formatas nėra tinkamas.
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_label(registrationForm.plainPassword, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(registrationForm.plainPassword, {
+                                    'attr': {
+                                        'class': 'form-control' ~ (registrationForm.plainPassword.vars.errors|length > 0 ? ' is-invalid' : ''),
+                                        'placeholder': 'Sukurkite slaptažodį'
+                                    }
+                                }) }}
+
+                                <div class="invalid-feedback">
+                                    Įveskite slaptažodį.
+                                </div>
+
+                                {% if registrationForm.plainPassword.vars.errors|length > 0 %}
+                                    <div class="password-requirements-alert mt-2">
+                                        <strong>Slaptažodis neatitinka saugumo reikalavimų.</strong>
+
+                                        <div class="mt-1">
+                                            {% for error in registrationForm.plainPassword.vars.errors %}
+                                                <div>{{ error.message }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-check mb-3 show-password-check">
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="showPassword"
+                                    data-password-toggle="registration_form_plainPassword"
+                                >
+                                <label class="form-check-label" for="showPassword">Rodyti slaptažodį</label>
+                            </div>
+
+                            <div class="form-check mb-4 terms-check">
+                                {{ form_widget(registrationForm.agreeTerms, {
+                                    'attr': {
+                                        'class': 'form-check-input' ~ (registrationForm.agreeTerms.vars.errors|length > 0 ? ' is-invalid' : '')
+                                    }
+                                }) }}
+                                {{ form_label(registrationForm.agreeTerms, null, {
+                                    'label_attr': {
+                                        'class': 'form-check-label'
+                                    }
+                                }) }}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 mb-3">
+                                Registruotis
+                            </button>
+
+                            <div class="text-center footer-note">
+                                Jau turite paskyrą?
+                                <a href="/login" class="fw-semibold">Prisijunkite</a>
+                            </div>
+
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/auth.js') }}"></script>
+{% endblock %}

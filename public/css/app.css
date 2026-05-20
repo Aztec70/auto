@@ -1,0 +1,734 @@
+:root {
+    --primary-color: #173070;
+    --primary-hover: #17306d;
+    --accent-color: #f59e0b;
+    --accent-hover: #d97706;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --light-bg: #f4f7fb;
+    --card-bg: #ffffff;
+    --text-color: #1f2937;
+    --muted-color: #6b7280;
+    --border-color: #e5e7eb;
+    --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 14px 30px rgba(0, 0, 0, 0.08);
+    --radius: 16px;
+    --radius-lg: 24px;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    background: linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.page-section {
+    padding: 3rem 0;
+}
+
+.custom-page-container {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+/* Typography */
+
+.section-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.section-subtitle {
+    color: var(--muted-color);
+    max-width: 700px;
+    margin-bottom: 2rem;
+}
+
+.page-header {
+    margin-bottom: 1.75rem;
+}
+
+.page-header .section-title,
+.page-header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.page-header .section-subtitle,
+.page-header p {
+    margin-bottom: 0;
+}
+
+/* Hero / CTA */
+
+.hero-section,
+.cta-box {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+}
+
+.hero-section {
+    padding: 4rem 2rem;
+}
+
+.cta-box {
+    padding: 2rem;
+}
+
+.hero-section h1,
+.hero-section p,
+.hero-section li,
+.hero-section h5 {
+    background: none !important;
+    color: #fff !important;
+}
+
+.hero-section h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-section p {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.9) !important;
+    max-width: 720px;
+}
+
+.hero-section .btn-outline-light,
+.cta-box .btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.hero-section .btn-outline-light:hover,
+.cta-box .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
+/* Cards */
+
+.card,
+.feature-card,
+.stat-card,
+.filter-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+}
+
+.card .card-body {
+    border-radius: var(--radius);
+}
+
+.feature-card,
+.stat-card {
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.filter-card .card-body {
+    padding: 1.5rem;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 1.5rem;
+    height: 100%;
+    color: #fff;
+}
+
+.feature-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(31, 60, 136, 0.1);
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+/* Navbar */
+
+.custom-navbar {
+    background: linear-gradient(90deg, #111827 0%, #1f2937 100%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.custom-navbar .navbar-brand {
+    font-size: 1.2rem;
+    letter-spacing: 0.3px;
+}
+
+.custom-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: 0.2s ease;
+    border-radius: 10px;
+    padding-left: 0.9rem !important;
+    padding-right: 0.9rem !important;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link:focus {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.navbar-profile-btn {
+    border-radius: 12px;
+    position: relative;
+}
+
+.navbar-profile-menu {
+    min-width: 240px;
+}
+
+/* Tables */
+
+.table {
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.table thead.table-dark th {
+    background: #1f2937 !important;
+    border-color: #1f2937 !important;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+/* Forms */
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    min-height: 44px;
+}
+
+textarea.form-control {
+    min-height: auto;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(31, 60, 136, 0.15);
+}
+
+/* Buttons */
+
+.btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-warning:hover,
+.btn-warning:focus {
+    color: #fff;
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Alerts / badges */
+
+.alert {
+    border: none;
+    border-radius: 14px;
+    box-shadow: var(--shadow-soft);
+}
+
+.badge {
+    border-radius: 999px;
+    padding: 0.5em 0.8em;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.status-waiting {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-clarify {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.status-confirmed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-done {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* Utilities */
+
+.footer-note {
+    color: var(--muted-color);
+    font-size: 0.95rem;
+}
+
+.empty-state {
+    padding: 2rem;
+    text-align: center;
+}
+
+.empty-state-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+    color: var(--muted-color);
+}
+
+.text-soft {
+    color: var(--muted-color);
+}
+
+/* Service page */
+
+.service-card {
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.service-image-wrapper {
+    height: 100%;
+    min-height: 220px;
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.service-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.service-placeholder {
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+}
+
+.service-placeholder i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+}
+
+.service-meta p {
+    margin-bottom: 0.5rem;
+}
+
+.service-meta strong {
+    color: #111827;
+}
+
+.service-category-badge {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* Appointment pages */
+
+.appointment-table td {
+    min-width: 140px;
+}
+
+.appointment-car,
+.appointment-datetime {
+    font-weight: 600;
+}
+
+.appointment-problem {
+    max-width: 320px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.appointment-note {
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    box-shadow: none;
+}
+
+.appointment-actions {
+    min-width: 150px;
+}
+
+.form-section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.vehicle-info-card {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-content {
+    border: 0;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--border-color);
+}
+
+/* Employee appointments */
+
+.employee-appointments-table td {
+    min-width: 140px;
+}
+
+.employee-actions {
+    min-width: 240px;
+}
+
+.employee-note-box {
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    box-shadow: none;
+}
+
+.employee-status-actions .btn {
+    text-align: center;
+}
+
+/* Report pages */
+
+.details-card {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+}
+
+.details-card p:last-child {
+    margin-bottom: 0;
+}
+
+.report-stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 1.25rem;
+    height: 100%;
+}
+
+.report-stat-label {
+    color: var(--muted-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+}
+
+.report-readonly {
+    background: #f8fafc !important;
+}
+
+.field-width-sm {
+    max-width: 240px;
+}
+
+.modal-summary-card {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+
+/* Admin users */
+
+.admin-users-table td,
+.admin-users-table th {
+    white-space: nowrap;
+}
+
+.admin-users-table td:nth-child(2),
+.admin-users-table th:nth-child(2),
+.admin-users-table td:nth-child(4),
+.admin-users-table th:nth-child(4) {
+    white-space: normal;
+}
+
+.filter-actions-nowrap {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+}
+
+.filter-actions-nowrap .btn {
+    white-space: nowrap;
+}
+
+/* Auth pages */
+
+.auth-section {
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+}
+
+.auth-card {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.auth-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.auth-subtitle {
+    color: var(--muted-color);
+    margin-bottom: 0;
+}
+
+/* Service form pages */
+
+.image-preview-box {
+    max-width: 320px;
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: var(--shadow-soft);
+}
+
+.image-preview-box img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.service-form-section {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+
+/* Formų validacija */
+
+/* Išjungia žalią validacijos žymėjimą */
+.was-validated .form-control:valid,
+.was-validated .form-select:valid,
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: #d1d5db !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    padding-right: 0.75rem;
+}
+
+/* Normalus aktyvaus lauko fokusas be žalios spalvos */
+.was-validated .form-control:valid:focus,
+.was-validated .form-select:valid:focus,
+.form-control.is-valid:focus,
+.form-select.is-valid:focus,
+.form-control:focus,
+.form-select:focus {
+    border-color: #86b7fe !important;
+    background-image: none !important;
+    box-shadow: 0 0 0 0.2rem rgba(31, 60, 136, 0.15) !important;
+}
+
+/* Raudonas žymėjimas tik klaidoms */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid,
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--danger-color) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    padding-right: 0.75rem;
+}
+
+.was-validated .form-control:invalid:focus,
+.was-validated .form-select:invalid:focus,
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+    border-color: var(--danger-color) !important;
+    background-image: none !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15) !important;
+}
+
+/* Tom Select be validacijos ikonėlių ir žalios spalvos */
+.ts-wrapper .ts-control,
+.ts-wrapper.is-valid .ts-control,
+.was-validated .ts-wrapper.is-valid .ts-control {
+    border-color: #d1d5db !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+.ts-wrapper.focus .ts-control {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.2rem rgba(31, 60, 136, 0.15) !important;
+}
+
+/* Tom Select klaida tik raudonu rėmeliu */
+.ts-wrapper.is-invalid .ts-control,
+.was-validated .ts-wrapper.is-invalid .ts-control {
+    border-color: var(--danger-color) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+.ts-wrapper.is-invalid.focus .ts-control,
+.ts-wrapper.is-invalid .ts-control:focus {
+    border-color: var(--danger-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15) !important;
+}
+
+/* Slaptažodžio klaidų blokas */
+.password-requirements-alert {
+    background: #f8d7da;
+    color: #842029;
+    border-radius: 14px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+}
+
+/* Rodyti slaptažodį checkbox neutralus */
+.show-password-check .form-check-input,
+.show-password-check .form-check-input:focus,
+.show-password-check .form-check-input:valid,
+.was-validated .show-password-check .form-check-input:valid {
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+}
+
+.show-password-check .form-check-input:checked {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    box-shadow: none !important;
+}
+
+.show-password-check .form-check-label,
+.was-validated .show-password-check .form-check-label {
+    color: var(--text-color) !important;
+}
+
+/* Sąlygų checkbox klaida */
+.terms-check .form-check-input.is-invalid,
+.was-validated .terms-check .form-check-input:invalid {
+    border-color: var(--danger-color) !important;
+}
+
+.terms-check .form-check-input.is-invalid ~ .form-check-label,
+.was-validated .terms-check .form-check-input:invalid ~ .form-check-label {
+    color: var(--danger-color) !important;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2.5rem 1.25rem;
+    }
+
+    .hero-section h1 {
+        font-size: 1.9rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .service-image-wrapper {
+        min-height: 180px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .appointment-problem {
+        max-width: none;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .employee-actions {
+        min-width: 210px;
+    }
+}
