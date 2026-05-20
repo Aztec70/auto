@@ -27,6 +27,7 @@ class AppExtension extends AbstractExtension
     public function getEmployeePendingCount(): int
     {
         $user = $this->security->getUser();
+        // Comment
 
         if (!$user instanceof User) {
             return 0;
