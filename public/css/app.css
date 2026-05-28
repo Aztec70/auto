@@ -585,6 +585,19 @@ textarea.form-control {
     margin-bottom: 1.5rem;
 }
 
+.character-counter,
+#service-description-counter {
+    color: var(--muted-color);
+    font-size: 0.9rem;
+}
+
+.was-validated input[type="file"].form-control:valid,
+input[type="file"].form-control.is-valid {
+    border-color: #d1d5db !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
 
 /* Formų validacija */
 

@@ -25,31 +25,105 @@
                             </p>
                         </div>
 
-                        {{ form_start(form) }}
+                        {{ form_start(form, {
+                            attr: {
+                                class: 'needs-validation',
+                                novalidate: 'novalidate'
+                            }
+                        }) }}
 
                             <div class="mb-3">
                                 {{ form_label(form.name, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Įveskite serviso pavadinimą'}}) }}
-                                {{ form_errors(form.name) }}
+                                {{ form_widget(form.name, {
+                                    attr: {
+                                        class: 'form-control',
+                                        required: 'required',
+                                        minlength: 3,
+                                        maxlength: 100,
+                                        pattern: '[A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž0-9\\s\\-\\.,&]+',
+                                        placeholder: 'Įveskite serviso pavadinimą'
+                                    }
+                                }) }}
+                                <div class="invalid-feedback">
+                                    Įveskite tinkamą serviso pavadinimą. Pavadinimas turi būti nuo 3 iki 100 simbolių.
+                                </div>
+                                {% if form.name.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.name.vars.errors %}
+                                            <div>{{ error.message }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <div class="mb-3">
                                 {{ form_label(form.address, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Įveskite serviso adresą'}}) }}
-                                {{ form_errors(form.address) }}
+                                {{ form_widget(form.address, {
+                                    attr: {
+                                        class: 'form-control',
+                                        required: 'required',
+                                        minlength: 5,
+                                        maxlength: 150,
+                                        placeholder: 'Įveskite serviso adresą'
+                                    }
+                                }) }}
+                                <div class="invalid-feedback">
+                                    Įveskite serviso adresą. Adresas turi būti nuo 5 iki 150 simbolių.
+                                </div>
+                                {% if form.address.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.address.vars.errors %}
+                                            <div>{{ error.message }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     {{ form_label(form.phone, null, {'label_attr': {'class': 'form-label'}}) }}
-                                    {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': 'Pvz. +37060000000'}}) }}
-                                    {{ form_errors(form.phone) }}
+                                    {{ form_widget(form.phone, {
+                                        attr: {
+                                            class: 'form-control',
+                                            required: 'required',
+                                            minlength: 9,
+                                            maxlength: 12,
+                                            pattern: '(\\+3706\\d{7}|06\\d{7})',
+                                            placeholder: 'Pvz. +37060000000 arba 060000000'
+                                        }
+                                    }) }}
+                                    <div class="invalid-feedback">
+                                        Įveskite lietuvišką telefono numerį formatu +3706xxxxxxx arba 06xxxxxxx.
+                                    </div>
+                                    {% if form.phone.vars.errors|length > 0 %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.phone.vars.errors %}
+                                                <div>{{ error.message }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}
-                                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Pvz. info@servisas.lt'}}) }}
-                                    {{ form_errors(form.email) }}
+                                    {{ form_widget(form.email, {
+                                        attr: {
+                                            class: 'form-control',
+                                            required: 'required',
+                                            maxlength: 180,
+                                            placeholder: 'Pvz. info@servisas.lt'
+                                        }
+                                    }) }}
+                                    <div class="invalid-feedback">
+                                        Įveskite tinkamą el. pašto adresą.
+                                    </div>
+                                    {% if form.email.vars.errors|length > 0 %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.email.vars.errors %}
+                                                <div>{{ error.message }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -59,25 +133,61 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         {{ form_label(form.workDayFrom, null, {'label_attr': {'class': 'form-label'}}) }}
-                                        {{ form_widget(form.workDayFrom, {'attr': {'class': 'form-select'}}) }}
+                                        {{ form_widget(form.workDayFrom, {
+                                            attr: {
+                                                class: 'form-select',
+                                                required: 'required'
+                                            }
+                                        }) }}
+                                        <div class="invalid-feedback">
+                                            Pasirinkite darbo pradžios dieną.
+                                        </div>
                                         {{ form_errors(form.workDayFrom) }}
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         {{ form_label(form.workDayTo, null, {'label_attr': {'class': 'form-label'}}) }}
-                                        {{ form_widget(form.workDayTo, {'attr': {'class': 'form-select'}}) }}
+                                        {{ form_widget(form.workDayTo, {
+                                            attr: {
+                                                class: 'form-select',
+                                                required: 'required'
+                                            }
+                                        }) }}
+                                        <div class="invalid-feedback">
+                                            Pasirinkite darbo pabaigos dieną.
+                                        </div>
                                         {{ form_errors(form.workDayTo) }}
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         {{ form_label(form.workTimeFrom, null, {'label_attr': {'class': 'form-label'}}) }}
-                                        {{ form_widget(form.workTimeFrom, {'attr': {'class': 'form-control js-timepicker', 'autocomplete': 'off', 'placeholder': 'Pasirinkite laiką'}}) }}
+                                        {{ form_widget(form.workTimeFrom, {
+                                            attr: {
+                                                class: 'form-control js-timepicker',
+                                                autocomplete: 'off',
+                                                required: 'required',
+                                                placeholder: 'Pasirinkite laiką'
+                                            }
+                                        }) }}
+                                        <div class="invalid-feedback">
+                                            Pasirinkite darbo pradžios laiką.
+                                        </div>
                                         {{ form_errors(form.workTimeFrom) }}
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         {{ form_label(form.workTimeTo, null, {'label_attr': {'class': 'form-label'}}) }}
-                                        {{ form_widget(form.workTimeTo, {'attr': {'class': 'form-control js-timepicker', 'autocomplete': 'off', 'placeholder': 'Pasirinkite laiką'}}) }}
+                                        {{ form_widget(form.workTimeTo, {
+                                            attr: {
+                                                class: 'form-control js-timepicker',
+                                                autocomplete: 'off',
+                                                required: 'required',
+                                                placeholder: 'Pasirinkite laiką'
+                                            }
+                                        }) }}
+                                        <div class="invalid-feedback">
+                                            Pasirinkite darbo pabaigos laiką.
+                                        </div>
                                         {{ form_errors(form.workTimeTo) }}
                                     </div>
                                 </div>
@@ -85,22 +195,63 @@
 
                             <div class="mb-3">
                                 {{ form_label(form.description, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Trumpai aprašykite servisą'}}) }}
-                                {{ form_errors(form.description) }}
+                                {{ form_widget(form.description, {
+                                    attr: {
+                                        class: 'form-control',
+                                        rows: 4,
+                                        maxlength: 1000,
+                                        placeholder: 'Trumpai aprašykite servisą',
+                                        'data-character-counter': 'service-description-counter'
+                                    }
+                                }) }}
+                                <div id="service-description-counter" class="form-text text-end">0 / 1000</div>
+                                <div class="invalid-feedback">
+                                    Aprašymas negali būti ilgesnis nei 1000 simbolių.
+                                </div>
+                                {% if form.description.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.description.vars.errors %}
+                                            <div>{{ error.message }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <div class="mb-3">
                                 {{ form_label(form.imageFile, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(form.imageFile) }}
+                                {{ form_widget(form.imageFile, {
+                                    attr: {
+                                        class: 'form-control',
+                                        accept: 'image/jpeg,image/png,image/webp'
+                                    }
+                                }) }}
+                                <div class="invalid-feedback">
+                                    Įkelkite JPG, PNG arba WEBP formato nuotrauką.
+                                </div>
+                                {% if form.imageFile.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.imageFile.vars.errors %}
+                                            <div>{{ error.message }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                                 <div class="form-text">
-                                    Galite įkelti JPG, PNG arba WEBP nuotrauką.
+                                    Galite įkelti JPG, PNG arba WEBP nuotrauką. Maksimalus dydis – 4 MB.
                                 </div>
                             </div>
 
                             <div class="mb-4">
                                 {{ form_label(form.categories, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.categories, {'attr': {'class': 'form-select tom-select', 'multiple': 'multiple'}}) }}
+                                {{ form_widget(form.categories, {
+                                    attr: {
+                                        class: 'form-select tom-select',
+                                        multiple: 'multiple',
+                                        required: 'required'
+                                    }
+                                }) }}
+                                <div class="invalid-feedback">
+                                    Pasirinkite bent vieną kategoriją.
+                                </div>
                                 {{ form_errors(form.categories) }}
                             </div>
 
